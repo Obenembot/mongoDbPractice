@@ -3,6 +3,7 @@ package com.sam.web.rest;
 import com.sam.entities.Student;
 import com.sam.reposotories.StudentRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class StudentController {
         return ResponseEntity.ok(studentRepository.insert(student));
     }
 
+    @Transactional
     @PutMapping("/students")
     public ResponseEntity update(@RequestBody Student student) {
 
@@ -39,4 +41,23 @@ public class StudentController {
 
         return ResponseEntity.ok(update);
     }
+
+    @Transactional
+    @GetMapping("/students/{id}")
+    public ResponseEntity findOne(@PathVariable Long id) {
+
+        Student student = studentRepository.findById(id).orElse(null);
+
+        return ResponseEntity.ok(student);
+    }
+
+    @Transactional
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity deleteOne(@PathVariable Long id) {
+
+        studentRepository.deleteById(id);
+
+        return ResponseEntity.ok("Student Deleted {}: " + id);
+    }
+
 }
