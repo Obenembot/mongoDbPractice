@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import static org.springframework.data.mongodb.core.mapping.FieldType.DECIMAL128;
+
 @Data
 @Getter
 @Setter
@@ -22,8 +24,8 @@ public class Student  {
 
     private String lastName;
 
-    @Field()
-    private Decimal128 salary;
+//    @Field(targetType = DECIMAL128)
+    private Double salary;
 
 
 }

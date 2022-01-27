@@ -2,6 +2,9 @@ package com.sam.web.rest;
 
 import com.sam.entities.Student;
 import com.sam.reposotories.StudentRepository;
+import io.swagger.annotations.ApiParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -59,5 +62,26 @@ public class StudentController {
 
         return ResponseEntity.ok("Student Deleted {}: " + id);
     }
+
+    @Transactional
+    @GetMapping("/students/firstName/{firstName}")
+    public  ResponseEntity findOneByFirstName(@PathVariable String firstName) {
+
+        Student oneByFirstName = studentRepository.findOneByFirstName(firstName);
+        return ResponseEntity.ok(oneByFirstName);
+    }
+
+
+    @Transactional
+    @GetMapping("/students/page")
+    public  ResponseEntity findAllByPageable( @ApiParam Pageable pageable) {
+
+        Page<Student> all = studentRepository.findAll(pageable);
+        return ResponseEntity.ok(all);
+    }
+
+
+
+
 
 }
