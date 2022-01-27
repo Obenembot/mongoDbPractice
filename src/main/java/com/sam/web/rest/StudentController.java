@@ -5,6 +5,7 @@ import com.sam.reposotories.StudentRepository;
 import io.swagger.annotations.ApiParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +66,7 @@ public class StudentController {
 
     @Transactional
     @GetMapping("/students/firstName/{firstName}")
-    public  ResponseEntity findOneByFirstName(@PathVariable String firstName) {
+    public ResponseEntity findOneByFirstName(@PathVariable String firstName) {
 
         Student oneByFirstName = studentRepository.findOneByFirstName(firstName);
         return ResponseEntity.ok(oneByFirstName);
@@ -73,15 +74,13 @@ public class StudentController {
 
 
     @Transactional
-    @GetMapping("/students/page")
-    public  ResponseEntity findAllByPageable( @ApiParam Pageable pageable) {
+    @GetMapping("/_search/students/page")
+    public ResponseEntity findAllByPageable(@RequestParam String query, @ApiParam Pageable pageable) {
 
-        Page<Student> all = studentRepository.findAll(pageable);
-        return ResponseEntity.ok(all);
+        TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(query);
+        Page<Student> allBy = studentRepository.findAllBy(criteria, pageable);
+        return ResponseEntity.ok(allBy);
     }
-
-
-
 
 
 }
